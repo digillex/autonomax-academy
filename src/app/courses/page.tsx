@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { courses } from "@/lib/courses";
+import { coursePurchaseUrl, mainSiteProductsUrl } from "@/lib/links";
 
 const categories = ["All", ...Array.from(new Set(courses.map((course) => course.category)))];
 
@@ -52,7 +53,7 @@ export default function CoursesPage() {
             <Link href="/courses" className="text-emerald-100">
               Courses
             </Link>
-            <a href="https://autonomax.site" className="hover:text-emerald-100">
+            <a href={mainSiteProductsUrl} className="hover:text-emerald-100">
               Membership
             </a>
           </nav>
@@ -139,12 +140,26 @@ export default function CoursesPage() {
                 <span>{course.level}</span>
                 <span>{course.duration}</span>
               </div>
-              <Link
-                href={`/courses/${course.slug}`}
-                className="mt-6 rounded-full bg-white px-4 py-3 text-center text-sm font-semibold text-[#071018] transition hover:bg-emerald-200"
-              >
-                View Course
-              </Link>
+              <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+                <Link
+                  href={`/courses/${course.slug}`}
+                  className="flex-1 rounded-full bg-white px-4 py-3 text-center text-sm font-semibold text-[#071018] transition hover:bg-emerald-200"
+                >
+                  View Course
+                </Link>
+                {course.status !== "Coming Soon" && !course.enrolled ? (
+                  <a
+                    href={
+                      course.status === "Paid"
+                        ? coursePurchaseUrl(course.slug)
+                        : mainSiteProductsUrl
+                    }
+                    className="flex-1 rounded-full border border-emerald-200/40 bg-emerald-400/90 px-4 py-3 text-center text-sm font-semibold text-[#04110d] transition hover:bg-emerald-300"
+                  >
+                    {course.status === "Paid" ? "Buy" : "Get Access"}
+                  </a>
+                ) : null}
+              </div>
             </article>
           ))}
         </section>

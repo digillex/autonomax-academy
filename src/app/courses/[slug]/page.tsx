@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { courses, getCourseBySlug, getLessonCounts } from "@/lib/courses";
+import {
+  coursePurchaseUrl,
+  mainSiteProductsUrl,
+  mainSiteUrl,
+} from "@/lib/links";
 
 type CourseDetailPageProps = {
   params: Promise<{
@@ -31,10 +36,20 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   ];
   const cta =
     course.status === "Coming Soon"
-      ? { label: "Notify Me", href: "#" }
+      ? { label: "Notify Me", href: "#", external: false }
       : course.enrolled
-        ? { label: "Continue Learning", href: `/learn/${course.slug}` }
-        : { label: "Get Access", href: "https://autonomax.site" };
+        ? { label: "Continue Learning", href: `/learn/${course.slug}`, external: false }
+        : course.status === "Paid"
+          ? {
+              label: "Buy Course",
+              href: coursePurchaseUrl(course.slug),
+              external: true,
+            }
+          : {
+              label: "Get Access",
+              href: mainSiteProductsUrl,
+              external: true,
+            };
 
   return (
     <main className="min-h-screen bg-[#0b1620] text-white">
@@ -102,16 +117,36 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               </div>
             ) : (
               <p className="mt-5 leading-7 text-slate-300">
-                Preview the syllabus and request access through the Autonomax
-                platform when enrollment opens.
+                Preview the syllabus, then complete purchase on Autonomax.site
+                (products, cart, and checkout).
               </p>
             )}
-            <Link
-              href={cta.href}
-              className="mt-7 inline-flex w-full justify-center rounded-full bg-emerald-400 px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-[#04110d] transition hover:bg-emerald-300"
-            >
-              {cta.label}
-            </Link>
+            {cta.external ? (
+              <a
+                href={cta.href}
+                className="mt-7 inline-flex w-full justify-center rounded-full bg-emerald-400 px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-[#04110d] transition hover:bg-emerald-300"
+              >
+                {cta.label}
+              </a>
+            ) : (
+              <Link
+                href={cta.href}
+                className="mt-7 inline-flex w-full justify-center rounded-full bg-emerald-400 px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-[#04110d] transition hover:bg-emerald-300"
+              >
+                {cta.label}
+              </Link>
+            )}
+            {!course.enrolled && course.status !== "Coming Soon" ? (
+              <p className="mt-4 text-center text-xs text-slate-400">
+                Checkout on{" "}
+                <a
+                  href={mainSiteUrl}
+                  className="font-semibold text-emerald-200 hover:text-emerald-100"
+                >
+                  autonomax.site
+                </a>
+              </p>
+            ) : null}
           </aside>
         </div>
 

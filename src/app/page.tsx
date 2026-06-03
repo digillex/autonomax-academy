@@ -1,3 +1,5 @@
+import { mainSiteProductsUrl, mainSiteUrl } from "@/lib/links";
+
 const focusAreas = [
   {
     title: "AI & Machine Learning",
@@ -348,7 +350,10 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <a href="https://autonomax.site" className="mt-8 inline-flex rounded-full border border-emerald-200/35 px-5 py-3 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300 hover:text-[#04110d]">
+              <a
+                href={mainSiteProductsUrl}
+                className="mt-8 inline-flex rounded-full border border-emerald-200/35 px-5 py-3 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300 hover:text-[#04110d]"
+              >
                 Select access
               </a>
             </article>
@@ -363,7 +368,12 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1fr_1.4fr] lg:px-10">
           <div>
             <h2 className="text-2xl font-semibold text-white">Autonomax Academy</h2>
-            <p className="mt-3 text-slate-300">Parent platform: Autonomax.site</p>
+            <p className="mt-3 text-slate-300">
+              Parent platform:{" "}
+              <a href={mainSiteUrl} className="font-semibold text-emerald-200 hover:text-emerald-100">
+                autonomax.site
+              </a>
+            </p>
           </div>
           <div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-200">
